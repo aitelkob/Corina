@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Persuasion Protocol: Interactive Playbook</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Harmony -->
+    <!-- Application Structure Plan: The application is structured as a tabbed, multi-section dashboard to transform the linear report into a non-linear, actionable playbook. This allows the user (a parent) to easily switch between understanding the core emotional strategies, analyzing the hard data, and accessing specific conversational tactics without being forced into a single path. The sections are: 1. **Home:** A mission statement. 2. **The Foundation:** Interactive accordions for empathetic listening techniques. 3. **The Data Room:** Interactive charts and tables for school comparison. 4. **The Playbook:** A step-by-step guide integrating Cialdini's principles. 5. **Handling Objections:** A dedicated module for the CSI issue. This task-oriented structure was chosen for maximum usability, allowing a parent to find the exact information they need at any point in their persuasion journey. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: School comparison data (rankings, scores, etc.). Goal: Compare. Viz Method: Bar charts via Chart.js for clear visual comparison of quantitative data. Interaction: Tooltips on hover. Justification: Charts are more intuitive and faster to digest than tables of numbers. Library: Chart.js (Canvas).
+        - Report Info: Unique school programs. Goal: Inform/Highlight Scarcity. Viz Method: Interactive HTML table. Interaction: Click to highlight/reveal more info. Justification: Maintains detail while allowing user-driven focus. Library: Vanilla JS + Tailwind.
+        - Report Info: Persuasion techniques (Goulston, Cialdini). Goal: Organize/Educate. Viz Method: Interactive accordions and cards. Interaction: Click to expand. Justification: Breaks down complex psychological concepts into manageable, self-paced chunks. Library: Vanilla JS + Tailwind.
+        - Report Info: Phased execution plan. Goal: Guide. Viz Method: Step-by-step process diagram. Interaction: Clickable steps. Justification: Provides a clear, actionable roadmap for the user to follow. Library: HTML/CSS.
+        - Report Info: CSI Designation. Goal: Neutralize counter-argument. Viz Method: A "flip card" or "reveal" component. Interaction: Click to see the reframe. Justification: Visually mimics the rhetorical strategy of turning a negative into a positive. Library: HTML/CSS + JS.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #F8F7F4; }
+        .nav-button { transition: all 0.3s ease; }
+        .nav-button.active { background-color: #2c3e50; color: white; }
+        .nav-button:not(.active):hover { background-color: #e0e0e0; }
+        .content-section { display: none; }
+        .content-section.active { display: block; }
+        .card { background-color: white; border-radius: 0.75rem; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); padding: 1.5rem; transition: all 0.3s ease; }
+        .accordion-header { cursor: pointer; }
+        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out; }
+        .chart-container { position: relative; width: 100%; max-width: 600px; margin-left: auto; margin-right: auto; height: 350px; max-height: 400px; }
+        @media (min-width: 768px) { .chart-container { height: 400px; } }
+        .tab-button.active { border-color: #2c3e50; background-color: #f0f0f0; }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-7xl">
+        
+        <header class="text-center mb-8">
+            <h1 class="text-4xl md:text-5xl font-bold text-[#2c3e50]">The Persuasion Protocol</h1>
+            <p class="text-lg text-gray-600 mt-2">An Interactive Playbook for Empowered Decision-Making</p>
+        </header>
+
+        <nav id="main-nav" class="flex flex-wrap justify-center gap-2 md:gap-4 mb-8 bg-gray-100 p-2 rounded-lg shadow-inner">
+            <button data-target="home" class="nav-button active text-sm md:text-base font-semibold py-2 px-4 rounded-md">Home</button>
+            <button data-target="foundation" class="nav-button text-sm md:text-base font-semibold py-2 px-4 rounded-md">Phase 1: Foundation</button>
+            <button data-target="data-room" class="nav-button text-sm md:text-base font-semibold py-2 px-4 rounded-md">Phase 2: Data Room</button>
+            <button data-target="playbook" class="nav-button text-sm md:text-base font-semibold py-2 px-4 rounded-md">Phase 3: The Playbook</button>
+            <button data-target="objections" class="nav-button text-sm md:text-base font-semibold py-2 px-4 rounded-md">Handling Objections</button>
+        </nav>
+
+        <main id="app-content">
+            <!-- Home Section -->
+            <section id="home" class="content-section active">
+                <div class="card text-center">
+                    <h2 class="text-2xl font-bold text-[#2c3e50] mb-4">Your Goal: Guide, Don't Dictate</h2>
+                    <p class="text-gray-700 leading-relaxed max-w-3xl mx-auto">
+                        This application translates the evidence-based "Persuasion Protocol" into an actionable guide. Your mission is not to force a decision, but to ethically guide your son toward an empowered choice that serves his long-term interests. We'll move beyond arguments and ultimatums, focusing instead on a sophisticated strategy of empathy, data, and psychological insight. Use the navigation above to explore the phases of the protocol, from laying an emotional foundation to making a collaborative, data-driven case.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Foundation Section -->
+            <section id="foundation" class="content-section">
+                <div class="card">
+                    <h2 class="text-2xl font-bold text-[#2c3e50] mb-2">Phase 1: Laying the Foundation</h2>
+                    <p class="text-gray-600 mb-6">This first phase is the most critical. The goal is not to persuade, but to listen so effectively that your son moves from resistance to receptivity. Master these techniques to earn the right to be heard.</p>
+                    <div id="foundation-accordion" class="space-y-4"></div>
+                </div>
+            </section>
+
+            <!-- Data Room Section -->
+            <section id="data-room" class="content-section">
+                 <div class="card">
+                    <h2 class="text-2xl font-bold text-[#2c3e50] mb-2">Phase 2: The Data Room - A Collaborative Analysis</h2>
+                    <p class="text-gray-600 mb-6">Frame this as a joint investigation, not a lecture. The objective data is your most powerful ally. Use these charts and tables to explore the facts together, letting the evidence itself make the argument.</p>
+                     <div class="text-center mb-6 border-b border-gray-200">
+                        <nav id="chart-nav" class="flex justify-center -mb-px gap-4">
+                           <button data-target="chart-academic" class="tab-button py-3 px-4 font-medium text-center border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 active">Academic Dashboard</button>
+                           <button data-target="chart-opportunity" class="tab-button py-3 px-4 font-medium text-center border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">Opportunity Explorer</button>
+                           <button data-target="chart-outcomes" class="tab-button py-3 px-4 font-medium text-center border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">Future Trajectory</button>
+                        </nav>
+                     </div>
+
+                     <div id="chart-views">
+                        <div id="chart-academic" class="chart-view active">
+                            <h3 class="text-xl font-semibold text-center mb-4 text-[#2c3e50]">Academic & Performance Dashboard</h3>
+                             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                                 <div class="chart-container"><canvas id="satChart"></canvas></div>
+                                 <div class="chart-container"><canvas id="proficiencyChart"></canvas></div>
+                             </div>
+                        </div>
+                        <div id="chart-opportunity" class="chart-view hidden">
+                             <h3 class="text-xl font-semibold text-center mb-4 text-[#2c3e50]">Programmatic & Extracurricular Opportunities</h3>
+                             <p class="text-center text-gray-600 mb-4">This table highlights the unique, high-value experiences available at each school. The goal is to activate the principle of <span class="font-bold">Scarcity</span> by showing what might be missed.</p>
+                             <div class="overflow-x-auto">
+                                 <table class="min-w-full bg-white divide-y divide-gray-200 rounded-lg shadow">
+                                     <thead class="bg-gray-50">
+                                         <tr>
+                                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Program Area</th>
+                                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hershey High School (HHS)</th>
+                                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rival Schools</th>
+                                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-teal-600">The Unique Advantage</th>
+                                         </tr>
+                                     </thead>
+                                     <tbody id="opportunities-table" class="divide-y divide-gray-200"></tbody>
+                                 </table>
+                             </div>
+                        </div>
+                         <div id="chart-outcomes" class="chart-view hidden">
+                              <h3 class="text-xl font-semibold text-center mb-4 text-[#2c3e50]">Future Trajectory - College & Career Outcomes</h3>
+                              <p class="text-center text-gray-600 mb-6">This section uses <span class="font-bold">Social Proof</span> to show the aspirational paths taken by graduates. It helps create a new, ambitious peer group to identify with.</p>
+                              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                  <div id="college-destinations" class="bg-gray-50 p-6 rounded-lg"></div>
+                                  <div id="fields-of-study" class="bg-gray-50 p-6 rounded-lg"></div>
+                                  <div id="notable-alumni" class="bg-gray-50 p-6 rounded-lg"></div>
+                              </div>
+                         </div>
+                     </div>
+                </div>
+            </section>
+
+            <!-- Playbook Section -->
+            <section id="playbook" class="content-section">
+                <div class="card">
+                    <h2 class="text-2xl font-bold text-[#2c3e50] mb-2">Phase 3: The Playbook - Guiding to a Conclusion</h2>
+                    <p class="text-gray-600 mb-6">With the foundation laid and data analyzed, it's time to weave it all together. This isn't a single speech, but a series of conversations. Use Cialdini's six principles of influence to guide him to his *own* well-reasoned conclusion.</p>
+                    <div id="playbook-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                </div>
+            </section>
+            
+            <!-- Objections Section -->
+            <section id="objections" class="content-section">
+                 <div class="card">
+                    <h2 class="text-2xl font-bold text-[#2c3e50] mb-2">Handling Objections: The CSI Designation</h2>
+                    <p class="text-gray-600 mb-6">Do not hide from this. A credible analysis addresses weaknesses head-on. By being the first to raise this issue, you demonstrate honesty and confidence, disarming the primary counterargument before it can be used against you.</p>
+                    <div id="csi-card" class="bg-amber-50 border-l-4 border-amber-400 p-6 rounded-r-lg">
+                        <div class="flex">
+                            <div class="py-1">
+                                <svg class="h-6 w-6 text-amber-500 mr-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-amber-800">The Counterargument: "It's a 'CSI' School."</h3>
+                                <p class="text-sm text-amber-700 mt-1">This is the biggest potential objection. Below is the strategy to turn this liability into an asset.</p>
+                                <button id="reveal-csi-strategy" class="mt-4 bg-amber-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-amber-600 transition-colors">Reveal the Strategy</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="csi-strategy" class="mt-4 p-6 bg-teal-50 border-l-4 border-teal-400 rounded-r-lg hidden"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    
+    const appData = {
+        foundation: [
+            {
+                title: 'The "Feeling Felt" Method',
+                content: 'This is a structured approach to empathetic listening. Your goal is not to solve, but to understand and reflect the underlying emotions. This builds a bridge and lowers emotional walls.',
+                script: '<strong>Sample Opening:</strong> "Hey, I know this whole high school decision is a really big deal. I don\'t want to talk about my opinion right now. I just really want to understand what this is like for you. Tell me about it." <br><br> <strong>If he says:</strong> "It would suck to be at a different school all alone." <br> <strong>Your "Feeling Felt" Reply:</strong> "It sounds like you\'re feeling really worried about being isolated and that separating from your support system feels like a huge loss. That must feel incredibly stressful." '
+            },
+            {
+                title: 'The Power of "Hmmm..." & Emotional Exhalation',
+                content: 'When someone is venting, the instinct is to argue or correct. Instead, encourage them to completely empty their emotional reserves. This creates a calm space where rational thought can begin.',
+                script: '<strong>Instead of arguing, use neutral prompts:</strong> "Hmmm...", "Tell me more about that.", "Go on." <br><br> Let him vent fully. When he pauses, resist filling the silence. Instead, ask: "Is there more?" This often unlocks a deeper layer of concern.'
+            },
+            {
+                title: 'Be More Interested Than Interesting',
+                content: 'Shift the dynamic. Instead of trying to be interesting with your wisdom, be profoundly interested in him. This is flattering and builds powerful rapport, enacting Cialdini\'s principles of Liking and Reciprocity.',
+                script: '<strong>Ask open-ended, exploratory questions:</strong> "When you picture the next four years, what does a really great experience look like to you?", "Help me understand what your relationship with [Girlfriend\'s Name] means to you. What are the best parts?" '
+            },
+            {
+                title: 'Pre-Suasion: Cultivating the Soil',
+                content: 'Subtly prepare his mind to be receptive to your message before you even deliver it. The goal is to make his "future successful self" a more compelling focus than his "present social self."',
+                script: '<strong>Use environmental cues:</strong> Leave a biography of a successful person on the coffee table. <br><strong>Use verbal priming:</strong> "I\'ve always been impressed by how independent you are. Do you consider yourself someone who likes to forge your own path?" <br><strong>Create mystery:</strong> "I found something really surprising about the programs at Hershey. We should talk about it sometime." Let the mystery linger to create curiosity.'
+            }
+        ],
+        dataRoom: {
+            satScores: {
+                labels: ['Hershey HS', 'Lower Dauphin HS', 'Palmyra Area HS'],
+                datasets: [{
+                    label: 'Average SAT Score',
+                    data: [1208, 1133, 1200],
+                    backgroundColor: ['#1abc9c', '#3498db', '#9b59b6'],
+                    borderColor: 'white',
+                    borderWidth: 2
+                }]
+            },
+            proficiencyScores: {
+                labels: ['Literature', 'Algebra I', 'Biology'],
+                datasets: [
+                    {
+                        label: 'Hershey HS',
+                        data: [86.5, 63, 79.7],
+                        backgroundColor: '#1abc9c',
+                    },
+                    {
+                        label: 'LDHS/PAHS Composite',
+                        data: [74, 62, 79.7], // Composite/average of rivals
+                        backgroundColor: '#3498db',
+                    }
+                ]
+            },
+            opportunities: [
+                { area: 'STEM & Technology', hhs: 'Comprehensive Engineering & Design pathway with CAD, Robotics, and 3D printing.', rival: 'Standard Tech Ed and elective courses like Video Game Design.', advantage: 'Industry-standard tools and a direct pathway for aspiring engineers.' },
+                { area: 'Arts & Performing Arts', hhs: 'Nationally recognized Blue Ribbon School with multiple Hershey Theater Apollo Awards for Best Student Orchestra.', rival: 'Standard music ensembles and art appreciation courses.', advantage: 'A proven level of excellence and external validation that is scarce.' },
+                { area: 'Business & Finance', hhs: 'Dual-enrollment college courses directly with HACC for Intro to Business and Accounting II.', rival: 'Standard high school-level business courses.', advantage: 'Earn actual, transferable college credits before graduation—a tangible head start.' },
+                { area: 'Dual Enrollment', hhs: 'Structured partnerships with Harrisburg University of Science & Technology and HACC.', rival: 'Partnerships primarily with community colleges.', advantage: 'Unique options, especially with a specialized STEM university.' }
+            ],
+            outcomes: {
+                colleges: { title: 'Top College Destinations', hhs: ['Penn State', 'Pitt', 'Temple', '<strong>Carnegie Mellon</strong>', '<strong>NYU</strong>', '<strong>U Penn</strong>', '<strong>Harvard</strong>', '<strong>MIT</strong>'], rival: ['Penn State', 'Pitt', 'Millersville', 'Shippensburg', 'Bloomsburg', 'West Chester'] },
+                fields: { title: 'Common Fields of Study', hhs: ['Business', 'Biology', 'Psychology', '<strong>Computer Sci</strong>', '<strong>Pre-Med</strong>', '<strong>Finance</strong>', '<strong>Engineering</strong>'], rival: ['Biology', 'Business', 'Nursing', 'Psychology'] },
+                alumni: { title: 'Notable Success Stories', hhs: ['<strong>Oscar-Winner</strong> Da\'Vine Joy Randolph', 'Comedian Michelle Wolf', 'Soccer Star Christian Pulisic', '<strong>3 National Merit Winners (2024)</strong>'], rival: ['Positive testimonials about teacher support and environment.'] }
+            }
+        },
+        playbook: [
+            { principle: 'Reciprocity', icon: '🎁', detail: 'People feel obligated to give back to those who have given to them. Your gift is your time, effort, and respect.', script: '<strong>Say:</strong> "I put in a lot of hours researching this because I respect you and believe you deserve all the facts. All I ask in return is that you seriously consider what this information is telling us."' },
+            { principle: 'Liking', icon: '😊', detail: 'We are more influenced by people we like. Highlight similarities and act as a cooperative partner.', script: '<strong>Say:</strong> "It\'s amazing how much this school\'s strengths, like its award-winning drama program, line up with your own talents. It feels like a place you could really thrive."' },
+            { principle: 'Social Proof', icon: '👥', detail: 'People look to the actions of others to guide their own behavior. Create a new, aspirational peer group.', script: '<strong>Say:</strong> "Look at the list of colleges where Hershey grads go—top-tier places like Carnegie Mellon. It\'s clear this is a path for students serious about their futures. That\'s the kind of company you deserve."' },
+            { principle: 'Authority', icon: '🎓', detail: 'People follow the lead of credible experts. Defer to the objective data as the ultimate authority.', script: '<strong>Say:</strong> "This isn\'t my opinion. This data comes directly from the PA Dept. of Education and U.S. News. The objective facts are what\'s important here, not my feelings."' },
+            { principle: 'Scarcity', icon: '💎', detail: 'Opportunities seem more valuable when they are limited. Emphasize what is unique and could be lost.', script: '<strong>Say:</strong> "That dual-enrollment engineering program is a unique opportunity you can\'t get elsewhere. If you don\'t choose Hershey, that specific advantage is gone forever. We need to think about what that\'s worth."' },
+            { principle: 'Consistency', icon: '🔗', detail: 'People feel pressure to be consistent with their past commitments. Link the decision to his own stated goals.', script: '<strong>Say:</strong> "You\'ve told me how important a career in [his goal] is. Given that, which of these paths is more consistent with the future you\'ve already said you want for yourself?"' }
+        ],
+        csiStrategy: {
+            title: 'The Reframe: From Liability to Asset',
+            steps: [
+                { title: 'Step 1: Acknowledge (The Stipulation Gambit)', text: 'Raise the issue yourself. "As we\'re looking at this, I want to be upfront. The state labeled Hershey a \'CSI\' school. My first reaction was concern, so I dug into what that actually means."' },
+                { title: 'Step 2: Explain with Authority', text: 'Define the term using official sources. "According to the state, the CSI label is triggered when specific student subgroups need extra support, even if the school is high-performing overall."' },
+                { title: 'Step 3: Analyze the "Why"', text: 'Apply it to the data. "Hershey\'s overall scores are excellent. The data shows the designation is likely because they\'re being held to a high standard to support their economically disadvantaged students."' },
+                { title: 'Step 4: Reframe as an Opportunity', text: 'This is the pivot. "This is actually a positive. It means the district is getting extra resources and expert attention to get even better. You get a top-tier school that is ALSO actively innovating and improving for every single student."' }
+            ]
+        }
+    };
+
+    const mainNav = document.getElementById('main-nav');
+    const contentSections = document.querySelectorAll('.content-section');
+
+    mainNav.addEventListener('click', (e) => {
+        if (e.target.tagName === 'BUTTON') {
+            const targetId = e.target.dataset.target;
+            
+            mainNav.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+            e.target.classList.add('active');
+
+            contentSections.forEach(section => {
+                section.classList.remove('active');
+                if (section.id === targetId) {
+                    section.classList.add('active');
+                }
+            });
+        }
+    });
+    
+    function initFoundation() {
+        const accordionContainer = document.getElementById('foundation-accordion');
+        let html = '';
+        appData.foundation.forEach((item, index) => {
+            html += `
+                <div class="border border-gray-200 rounded-lg">
+                    <div class="accordion-header p-4 flex justify-between items-center bg-gray-50 rounded-t-lg" data-index="${index}">
+                        <h3 class="text-lg font-semibold text-[#2c3e50]">${item.title}</h3>
+                        <span class="transform transition-transform duration-300">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="p-4 border-t border-gray-200">
+                            <p class="text-gray-700 mb-4">${item.content}</p>
+                            <div class="bg-blue-50 p-3 rounded-lg border-l-4 border-blue-400 text-sm text-blue-800">
+                                ${item.script}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        accordionContainer.innerHTML = html;
+
+        accordionContainer.querySelectorAll('.accordion-header').forEach(header => {
+            header.addEventListener('click', function() {
+                const content = this.nextElementSibling;
+                const arrow = this.querySelector('span');
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                    arrow.style.transform = 'rotate(0deg)';
+                } else {
+                    document.querySelectorAll('.accordion-content').forEach(el => el.style.maxHeight = null);
+                    document.querySelectorAll('.accordion-header span').forEach(el => el.style.transform = 'rotate(0deg)');
+                    content.style.maxHeight = content.scrollHeight + "px";
+                    arrow.style.transform = 'rotate(180deg)';
+                }
+            });
+        });
+    }
+
+    function initDataRoom() {
+        const chartNav = document.getElementById('chart-nav');
+        const chartViews = document.querySelectorAll('.chart-view');
+
+        chartNav.addEventListener('click', (e) => {
+            if (e.target.tagName === 'BUTTON') {
+                const targetId = e.target.dataset.target;
+
+                chartNav.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+                e.target.classList.add('active');
+
+                chartViews.forEach(view => {
+                    view.classList.add('hidden');
+                    if (view.id === targetId) {
+                        view.classList.remove('hidden');
+                    }
+                });
+            }
+        });
+
+        // Init Charts
+        new Chart(document.getElementById('satChart'), {
+            type: 'bar',
+            data: appData.dataRoom.satScores,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: { display: true, text: 'Average SAT Scores', font: { size: 16 } },
+                    legend: { display: false }
+                },
+                scales: { y: { beginAtZero: false, suggestedMin: 1000 } }
+            }
+        });
+
+        new Chart(document.getElementById('proficiencyChart'), {
+            type: 'bar',
+            data: appData.dataRoom.proficiencyScores,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: { display: true, text: 'State Assessment Proficiency (%)', font: { size: 16 } },
+                    tooltip: { mode: 'index', intersect: false }
+                },
+                scales: { x: { stacked: false }, y: { stacked: false, beginAtZero: true, max: 100 } }
+            }
+        });
+        
+        // Init Opportunities Table
+        const opportunitiesTable = document.getElementById('opportunities-table');
+        let tableHtml = '';
+        appData.dataRoom.opportunities.forEach(item => {
+            tableHtml += `
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap font-medium">${item.area}</td>
+                    <td class="px-6 py-4 text-sm text-gray-700">${item.hhs}</td>
+                    <td class="px-6 py-4 text-sm text-gray-700">${item.rival}</td>
+                    <td class="px-6 py-4 text-sm text-teal-700 font-semibold bg-teal-50">${item.advantage}</td>
+                </tr>
+            `;
+        });
+        opportunitiesTable.innerHTML = tableHtml;
+
+        // Init Outcomes
+        const outcomesData = appData.dataRoom.outcomes;
+        document.getElementById('college-destinations').innerHTML = `
+            <h4 class="font-bold mb-2 text-lg text-[#2c3e50]">${outcomesData.colleges.title}</h4>
+            <div class="grid grid-cols-2 gap-4">
+                <div><strong class="text-teal-700">Hershey</strong><ul class="list-disc list-inside text-sm">${outcomesData.colleges.hhs.map(c => `<li>${c}</li>`).join('')}</ul></div>
+                <div><strong>Rivals</strong><ul class="list-disc list-inside text-sm">${outcomesData.colleges.rival.map(c => `<li>${c}</li>`).join('')}</ul></div>
+            </div>`;
+        document.getElementById('fields-of-study').innerHTML = `
+            <h4 class="font-bold mb-2 text-lg text-[#2c3e50]">${outcomesData.fields.title}</h4>
+            <div class="grid grid-cols-2 gap-4">
+                <div><strong class="text-teal-700">Hershey</strong><ul class="list-disc list-inside text-sm">${outcomesData.fields.hhs.map(f => `<li>${f}</li>`).join('')}</ul></div>
+                <div><strong>Rivals</strong><ul class="list-disc list-inside text-sm">${outcomesData.fields.rival.map(f => `<li>${f}</li>`).join('')}</ul></div>
+            </div>`;
+        document.getElementById('notable-alumni').innerHTML = `
+            <h4 class="font-bold mb-2 text-lg text-[#2c3e50]">${outcomesData.alumni.title}</h4>
+            <div><strong class="text-teal-700">Hershey</strong><ul class="list-disc list-inside text-sm">${outcomesData.alumni.hhs.map(a => `<li>${a}</li>`).join('')}</ul></div>
+            <div class="mt-2"><strong>Rivals</strong><ul class="list-disc list-inside text-sm">${outcomesData.alumni.rival.map(a => `<li>${a}</li>`).join('')}</ul></div>`;
+    }
+
+    function initPlaybook() {
+        const playbookGrid = document.getElementById('playbook-grid');
+        let html = '';
+        appData.playbook.forEach(item => {
+            html += `
+                <div class="bg-gray-50 p-6 rounded-lg shadow-sm border border-gray-200">
+                    <div class="text-3xl mb-3">${item.icon}</div>
+                    <h3 class="text-xl font-bold text-[#2c3e50]">${item.principle}</h3>
+                    <p class="text-gray-600 mt-2 mb-4 h-20">${item.detail}</p>
+                    <div class="bg-blue-50 p-3 rounded-lg border-l-4 border-blue-400 text-sm text-blue-800">
+                        ${item.script}
+                    </div>
+                </div>
+            `;
+        });
+        playbookGrid.innerHTML = html;
+    }
+
+    function initObjections() {
+        const revealBtn = document.getElementById('reveal-csi-strategy');
+        const strategyContainer = document.getElementById('csi-strategy');
+        
+        let strategyHtml = `<h4 class="font-bold text-teal-800 text-lg mb-4">${appData.csiStrategy.title}</h4><div class="space-y-4">`;
+        appData.csiStrategy.steps.forEach(step => {
+            strategyHtml += `
+                <div>
+                    <h5 class="font-semibold text-teal-700">${step.title}</h5>
+                    <p class="text-sm text-teal-800">${step.text}</p>
+                </div>
+            `;
+        });
+        strategyHtml += `</div>`;
+        strategyContainer.innerHTML = strategyHtml;
+
+        revealBtn.addEventListener('click', () => {
+            strategyContainer.classList.toggle('hidden');
+            revealBtn.textContent = strategyContainer.classList.contains('hidden') ? 'Reveal the Strategy' : 'Hide the Strategy';
+        });
+    }
+
+    initFoundation();
+    initDataRoom();
+    initPlaybook();
+    initObjections();
+});
+</script>
+
+</body>
+</html>
+
